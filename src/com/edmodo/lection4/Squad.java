@@ -9,7 +9,8 @@ import java.util.Scanner;
 class Squad implements Cloneable {
 
     private String squadName = new String();
-    private int warriorNumber = (int) (Math.random() * 1) + 3;
+    // количество бойцов в отряде от 3 до 6
+    private int warriorNumber = (int) (Math.random() * 4) + 3;
     ArrayList<Warrior> squadList = new ArrayList<>();
 
     void setName() {
