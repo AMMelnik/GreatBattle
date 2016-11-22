@@ -3,7 +3,7 @@ package com.edmodo.lection4;
 /**
  * Created by pc on 19.11.2016.
  */
-public interface Warrior {
+interface Warrior {
 
     int attack();
 
@@ -13,4 +13,7 @@ public interface Warrior {
 
     void setSquadName(String name);
 
+    String getHealthStatus();
+
+    String getNameOnly();
 }

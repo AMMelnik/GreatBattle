@@ -1,6 +1,6 @@
 package com.edmodo.lection4;
 
-        import java.util.Scanner;
+import java.util.Scanner;
 
 /**
  * Created by pc on 19.11.2016.
