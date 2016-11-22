@@ -34,9 +34,9 @@ public class Battle {
                 + "\u001b[30;m Второй отряд: " + squad2.toString() + "\n");
     }
 
-    void showBattle() {
+    void startBattle() {
          System.out.println(dateHelper.getFormattedStartDate() + "\n");
-         while(squad1.hasAliveWarriors()) {
+       //  while(squad1.hasAliveWarriors()) {
              Warrior warrior1 = squad1.getRandomWarrior();
              Warrior warrior2 = squad2.getRandomWarrior();
              System.out.println("\u001b[30;m Атакует боец " + warrior1.toString() + "\n");
@@ -50,7 +50,7 @@ public class Battle {
              warrior3.takeDamage(warrior4.attack());
              System.out.println("\u001b[30;m Боец " + warrior3.toString() + "\u001b[30;m  принимает удар!\n");
              dateHelper.skipTime();
-         }
+         //}
          System.out.println(dateHelper.getFormattedDiff());
          for (Warrior warrior : squad1.squad) {
             System.out.println(warrior.isAlive());
@@ -58,6 +58,6 @@ public class Battle {
          for (Warrior warrior : squad2.squad) {
             System.out.println(warrior.isAlive());
          }
-    }
+  }
 
 }
