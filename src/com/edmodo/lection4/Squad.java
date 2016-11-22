@@ -1,71 +1,79 @@
 package com.edmodo.lection4;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Created by pc on 19.11.2016.
  */
-public class Squad implements Cloneable {
+class Squad implements Cloneable {
 
-    String squadName;
-    int warriorNumber = (int) (Math.random()*1) + 3;
+    private String squadName = new String();
+    private int warriorNumber = (int) (Math.random() * 1) + 3;
+    ArrayList<Warrior> squadList = new ArrayList<>();
 
-    public void setName() {
+    void setName() {
         System.out.println("\u001b[30;m Установите имя отряда\n");
         Scanner scName = new Scanner(System.in);
-        squadName = scName.nextLine();
-
+        this.squadName = scName.nextLine();
     }
 
     Warrior[] squad = new Warrior[warriorNumber];
-
-    void createSquad(){
+    // добавление бойцов в отряд
+    void createSquad() {
         for (int i = 0; i < warriorNumber; i++) {
             int warriorType = (int) (Math.random() * 3 + 1);
+            int firstNameRandom = (int) (Math.random() * 4);
+            int lastNameRandom = (int) (Math.random() * 101 + 1);
             switch (warriorType) {
                 case 1:
-                    squad[i] = new Scout();
+                    squad[i] = new Scout(firstNameRandom, lastNameRandom);
                     break;
                 case 2:
-                    squad[i] = new Fighter();
+                    squad[i] = new Fighter(firstNameRandom, lastNameRandom);
                     break;
                 case 3:
-                    squad[i] = new Bomber();
+                    squad[i] = new Bomber(firstNameRandom, lastNameRandom);
                     break;
             }
+            squadList.add(squad[i]);
         }
     }
 
     void setSquadNameForWarriors() {
         for (Warrior warrior : squad) {
-            warrior.setSquadName(squadName);
+            warrior.setSquadName(this.squadName);
         }
     }
 
     //находит случайного живого бойца
-    public Warrior getRandomWarrior() {
-        int randomWarrior;
-        do {
-            randomWarrior = (int) (Math.random() * (squad.length - 1));
-            System.out.println("\u001b[30;m На бой вызываются:\n");
-        } while (!squad[randomWarrior].isAlive());
-       // System.out.println(squad[randomWarrior].toString() + "\n");
-        return squad[randomWarrior];
+    Warrior getRandomWarrior() {
+        int randomWarrior = (int) (Math.random() * (squadList.size()));
+        return squadList.get(randomWarrior);
     }
+
     // проверяет, остались ли живые бойцы
-    public boolean hasAliveWarriors() {
+    boolean hasAliveWarriors() {
         for (Warrior warrior : squad) {
-            if (warrior.isAlive()) return true;
-        } return false;
+            if (!warrior.isAlive()) squadList.remove(warrior);
+        }
+        if (squadList.isEmpty()) {
+            return false;
+        } else return true;
     }
 
     @Override
     public String toString() {
-        return squadName;
+        return this.squadName;
     }
 
     @Override
     public Squad clone() throws CloneNotSupportedException {
-        return (Squad) super.clone();
+        Squad clonedSquad = (Squad) super.clone();
+        clonedSquad.squad = (Warrior[]) squad.clone();
+        clonedSquad.setName();
+        clonedSquad.setSquadNameForWarriors();
+        return clonedSquad;
     }
+
 }

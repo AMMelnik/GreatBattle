@@ -5,59 +5,88 @@ package com.edmodo.lection4;
  */
 public class Battle {
 
-    DateHelper dateHelper = new DateHelper();
-    Squad squad1 = new Squad();
-    Squad squad2 = null;
-
-  /*  void chooseWarrior(Squad s){
-        int unitOfSquad = (int) (Math.random()*s.length)
-    }*/
+    private Squad squad1 = new Squad();
+    private Squad squad2 = null;
 
     void readyToBattle(int value) throws CloneNotSupportedException {
         System.out.println("\u001b[32;m Первый отряд\n");
         squad1.setName();
         squad1.createSquad();
         squad1.setSquadNameForWarriors();
+
+        /* "глубокое" клонирование второго отряда не получается. копируются ссылки, отряд дерется сам с собой
+        Может надо Equals переопределять?
+         */
         if (value == 1) {
-            squad2 = squad1.clone();
-            System.out.println("\u001b[32;m Второй отряд\n");
-            squad2.setName();
+            try {
+                System.out.println("\u001b[32;m Второй отряд\n");
+                squad2 = squad1.clone();
+            } catch (CloneNotSupportedException e) {
+                System.out.println("Отряд не может быть клонирован");
+            }
         }
+        // создаем второй отряд с нуля
         if (value == 2) {
             squad2 = new Squad();
             System.out.println("\u001b[32;m Второй отряд\n");
             squad2.setName();
             squad2.createSquad();
+            squad2.setSquadNameForWarriors();
         }
-        squad2.setSquadNameForWarriors();
         System.out.println("\u001b[30;m Первый отряд: " + squad1.toString() + "\n"
                 + "\u001b[30;m Второй отряд: " + squad2.toString() + "\n");
     }
 
-    void showBattle() {
-         System.out.println(dateHelper.getFormattedStartDate() + "\n");
-         while(squad1.hasAliveWarriors()) {
-             Warrior warrior1 = squad1.getRandomWarrior();
-             Warrior warrior2 = squad2.getRandomWarrior();
-             System.out.println("\u001b[30;m Атакует боец " + warrior1.toString() + "\n");
-             warrior2.takeDamage(warrior1.attack());
-             System.out.println("\u001b[30;m Боец " + warrior2.toString() + "\u001b[30;m  принимает удар!\n");
-             dateHelper.skipTime();
-
-             Warrior warrior3 = squad1.getRandomWarrior();
-             Warrior warrior4 = squad2.getRandomWarrior();
-             System.out.println("\u001b[30;m Атакует боец " + warrior4.toString() + "\n");
-             warrior3.takeDamage(warrior4.attack());
-             System.out.println("\u001b[30;m Боец " + warrior3.toString() + "\u001b[30;m  принимает удар!\n");
-             dateHelper.skipTime();
-         }
-         System.out.println(dateHelper.getFormattedDiff());
-         for (Warrior warrior : squad1.squad) {
-            System.out.println(warrior.isAlive());
-         }
-         for (Warrior warrior : squad2.squad) {
-            System.out.println(warrior.isAlive());
-         }
+    void startBattle() {
+        DateHelper dateHelper = new DateHelper();
+        // выводим текущую дату-время -1500 лет
+        System.out.println(dateHelper.getFormattedStartDate() + "\n");
+        Warrior warrior1, warrior2;
+        // пока есть живые в обоих отрядах
+        while (squad1.hasAliveWarriors() && squad2.hasAliveWarriors()) {
+            //выбор бойцов для первого раунда
+            warrior1 = squad1.getRandomWarrior();
+            warrior2 = squad2.getRandomWarrior();
+            // описание раунда
+            StringBuilder strBattleFirstRound = new StringBuilder("\u001b[30;m     На бой вызываются: \n")
+                    .append(warrior1.toString() + "и " + warrior2.toString() + "\n")
+                    .append("\u001b[30;mАтакует боец " + warrior1.getNameOnly() + "\n")
+                    .append("\u001b[30;mБоец " + warrior2.getNameOnly() + "\u001b[30;m  принимает удар!");
+            System.out.println(strBattleFirstRound);
+            // удар и потеря здоровья
+            warrior2.takeDamage(warrior1.attack());
+            System.out.println(warrior2.getHealthStatus());
+            // пропускаем время раунда 20мин
+            dateHelper.skipTime();
+            // если есть живые в певром и нет живых во втором
+            if (squad1.hasAliveWarriors() & !squad2.hasAliveWarriors()) {
+                System.out.println("\u001b[31;m Второй отряд полностью разбит!!!\n");
+                System.out.println("\u001b[36;m Победу одержал отряд " + squad1.toString() + " ! УРА!!!\n");
+                // если есть живые во втором и нет живых во первом
+            } else if (!squad1.hasAliveWarriors() & squad2.hasAliveWarriors()) {
+                System.out.println("\u001b[31;m Первый отряд полностью разбит!!!\n");
+                System.out.println("\u001b[36;m Победу одержал отряд " + squad2.toString() + " ! УРА!!!\n");
+            }
+            // выбор бойцов для второго раунда. Пока не придумал, как обойтись без такого большого дублирования кода
+            warrior1 = squad1.getRandomWarrior();
+            warrior2 = squad2.getRandomWarrior();
+            StringBuilder strBattleSecondRound = new StringBuilder("\u001b[30;m     На бой вызываются: \n")
+                    .append(warrior1.toString() + "и " + warrior2.toString() + "\n")
+                    .append("\u001b[30;mАтакует боец " + warrior2.getNameOnly() + "\n")
+                    .append("\u001b[30;mБоец " + warrior1.getNameOnly() + "\u001b[30;m  принимает удар!");
+            System.out.println(strBattleSecondRound);
+            warrior1.takeDamage(warrior2.attack());
+            System.out.println(warrior1.getHealthStatus());
+            dateHelper.skipTime();
+            if (squad1.hasAliveWarriors() & !squad2.hasAliveWarriors()) {
+                System.out.println("\u001b[31;m Второй отряд полностью разбит!!!\n");
+                System.out.println("\u001b[36;m Победу одержал отряд " + squad1.toString() + " ! УРА!!!\n");
+            } else if (!squad1.hasAliveWarriors() & squad2.hasAliveWarriors()) {
+                System.out.println("\u001b[31;m Первый отряд полностью разбит!!!\n");
+                System.out.println("\u001b[36;m Победу одержал отряд " + squad2.toString() + " ! УРА!!!\n");
+            }
+        }
+        // вывести вермя сражения
+        System.out.println(dateHelper.getFormattedDiff());
     }
-
 }
