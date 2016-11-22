@@ -5,10 +5,15 @@ package com.edmodo.lection4;
  */
 public class Bomber implements Warrior, Cloneable {
 
-    int damage = 100;
-    int health = 50;
-    String name = "Bob";
-    String squadName;
+    private int damage = 100;
+    private int health = 50;
+    private String[] nameArray = {"Bob", "Bill", "Bryan", "Benjamin"};
+    private String name;
+    private String squadName;
+
+    Bomber(int nameNumber, int surnameNumber) {
+        this.name = nameArray[nameNumber] + "_" + surnameNumber;
+    }
 
     @Override
     public int attack() {
@@ -23,11 +28,8 @@ public class Bomber implements Warrior, Cloneable {
     @Override
     public boolean isAlive() {
         if (health > 0) {
-            System.out.println(toString() + "\u001b[30;m  Остаток здоровья: " + health + "\n");
             return true;
-        }
-        else {
-            System.out.println(toString() + "\u001b[31;m . Погиб!\n");
+        } else {
             return false;
         }
     }
@@ -38,11 +40,25 @@ public class Bomber implements Warrior, Cloneable {
     }
 
     @Override
+    public String getHealthStatus() {
+        String healthStatus = new String();
+        if (health > 0) {
+            healthStatus = "\u001b[30;mЕго здоровье равно " + health + "\n";
+        } else healthStatus = "\u001b[31;mБоец пал смертью храбрых!\n";
+        return healthStatus;
+    }
+
+    @Override
+    public String getNameOnly() {
+        return name;
+    }
+
+    @Override
     public String toString() {
         StringBuilder strBomber = new StringBuilder().append("\u001b[31;m" + name)
                 .append("\u001b[30;m. Класс" + "\u001b[31;m Подрывник")
                 .append("\u001b[30;m , Отряд " + "\u001b[30;m" + squadName + "\n");
-                return strBomber.toString();
+        return strBomber.toString();
     }
 
     @Override

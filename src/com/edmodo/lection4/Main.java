@@ -14,7 +14,7 @@ public class Main {
         int twoSquads = scTwoSquads.nextInt();
         Battle battle = new Battle();
         battle.readyToBattle(twoSquads);
-        battle.showBattle();
+        battle.startBattle();
 
     }
 }
