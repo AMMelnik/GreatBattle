@@ -10,7 +10,7 @@ class Squad implements Cloneable {
 
     private String squadName = new String();
     // количество бойцов в отряде от 3 до 6
-    private int warriorNumber = (int) (Math.random() * 4) + 3;
+    private int warriorNumber = (int) (Math.random() * 4) + 3; //сделать возможность использовать любоен количество бойцов в отряде!!!
     ArrayList<Warrior> squadList = new ArrayList<>();
 
     void setName() {
@@ -19,7 +19,7 @@ class Squad implements Cloneable {
         this.squadName = scName.nextLine();
     }
 
-    Warrior[] squad = new Warrior[warriorNumber];
+    Warrior[] squad = new Warrior[warriorNumber]; //сначала в классе объявляют поля, затем конструкторы, затем основные методы
     // добавление бойцов в отряд
     void createSquad() {
         for (int i = 0; i < warriorNumber; i++) {
@@ -47,7 +47,7 @@ class Squad implements Cloneable {
         }
     }
 
-    //находит случайного живого бойца
+    //находит случайного живого бойца //к чему эти комментарии? из названия разве непонятно, что делает метод?
     Warrior getRandomWarrior() {
         int randomWarrior = (int) (Math.random() * (squadList.size()));
         return squadList.get(randomWarrior);
@@ -56,7 +56,7 @@ class Squad implements Cloneable {
     // проверяет, остались ли живые бойцы
     boolean hasAliveWarriors() {
         for (Warrior warrior : squad) {
-            if (!warrior.isAlive()) squadList.remove(warrior);
+            if (!warrior.isAlive()) squadList.remove(warrior); //не имеет смысла каждый раз проходить весь список
         }
         if (squadList.isEmpty()) {
             return false;
@@ -71,7 +71,7 @@ class Squad implements Cloneable {
     @Override
     public Squad clone() throws CloneNotSupportedException {
         Squad clonedSquad = (Squad) super.clone();
-        clonedSquad.squad = (Warrior[]) squad.clone();
+        clonedSquad.squad = (Warrior[]) squad.clone(); //массив новый, а бойцы старые. нужно отдельно клонировать каждого бойца
         clonedSquad.setName();
         clonedSquad.setSquadNameForWarriors();
         return clonedSquad;
