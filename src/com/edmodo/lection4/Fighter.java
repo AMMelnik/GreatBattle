@@ -7,13 +7,12 @@ public class Fighter implements Warrior, Cloneable {
 
     int damage = 50;
     int health = 150;
-    String[] nameArray = {"Jimmy", "John", "James", "Jerry"};
     String name;
     String squadName;
 
 
-    Fighter(int nameNumber, int surnameNumber) {
-        this.name = nameArray[nameNumber] + "_" + surnameNumber;
+    Fighter(String name) {
+        this.name = name;
     }
 
     @Override
@@ -23,16 +22,12 @@ public class Fighter implements Warrior, Cloneable {
 
     @Override
     public void takeDamage(int damage) {
-        this.health -= damage;
+        health -= damage;
     }
 
     @Override
     public boolean isAlive() {
-        if (health > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (health > 0);
     }
 
     @Override
@@ -42,11 +37,9 @@ public class Fighter implements Warrior, Cloneable {
 
     @Override
     public String getHealthStatus() {
-        String healthStatus = new String();
         if (health > 0) {
-            healthStatus = "\u001b[30;mЕго здоровье равно " + health + "\n";
-        } else healthStatus = "\u001b[31;mБоец пал смертью храбрых!\n";
-        return healthStatus;
+            return "\u001b[30;mЕго здоровье равно " + health + "\n";
+        } else return "\u001b[31;mБоец пал смертью храбрых!\n";
     }
 
     @Override
@@ -56,10 +49,8 @@ public class Fighter implements Warrior, Cloneable {
 
     @Override
     public String toString() {
-        StringBuilder strFighter = new StringBuilder().append("\u001b[32;m" + name)
-                .append("\u001b[30;m. Класс" + "\u001b[32;m Борец")
-                .append("\u001b[30;m , Отряд " + "\u001b[30;m" + squadName + "\n");
-        return strFighter.toString();
+        return "\u001b[34;m" + name + "\u001b[30;m. Класс" + "\u001b[34;m Борец" +
+                "\u001b[30;m , Отряд " + "\u001b[30;m" + squadName + "\n";
     }
 
     @Override

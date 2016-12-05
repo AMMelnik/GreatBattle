@@ -11,6 +11,7 @@ public class Battle {
     void readyToBattle(int value) throws CloneNotSupportedException {
         System.out.println("\u001b[32;m Первый отряд\n");
         squad1.setName();
+        squad1.setSquadSize();
         squad1.createSquad();
         squad1.setSquadNameForWarriors();
 
@@ -30,6 +31,7 @@ public class Battle {
             squad2 = new Squad();
             System.out.println("\u001b[32;m Второй отряд\n");
             squad2.setName();
+            squad2.setSquadSize();
             squad2.createSquad();
             squad2.setSquadNameForWarriors();
         }
@@ -42,8 +44,9 @@ public class Battle {
         // выводим текущую дату-время -1500 лет
         System.out.println(dateHelper.getFormattedStartDate() + "\n");
         Warrior warrior1, warrior2;
+        boolean isBattleEnd = false;
         // пока есть живые в обоих отрядах
-        while (squad1.hasAliveWarriors() && squad2.hasAliveWarriors()) {
+        while (!isBattleEnd) {
             //выбор бойцов для первого раунда
             warrior1 = squad1.getRandomWarrior();
             warrior2 = squad2.getRandomWarrior();
@@ -56,16 +59,22 @@ public class Battle {
             // удар и потеря здоровья
             warrior2.takeDamage(warrior1.attack());
             System.out.println(warrior2.getHealthStatus());
+            squad2.needHimDeleteFromSquad(warrior2);
             // пропускаем время раунда 20мин
             dateHelper.skipTime();
-            // если есть живые в певром и нет живых во втором
+            // если есть живые в первом и нет живых во втором
             if (squad1.hasAliveWarriors() & !squad2.hasAliveWarriors()) {
                 System.out.println("\u001b[31;m Второй отряд полностью разбит!!!\n");
                 System.out.println("\u001b[36;m Победу одержал отряд " + squad1.toString() + " ! УРА!!!\n");
-                // если есть живые во втором и нет живых во первом
-            } else if (!squad1.hasAliveWarriors() & squad2.hasAliveWarriors()) {
+                isBattleEnd = true;
+                continue;
+            }
+            // если есть живые во втором и нет живых во первом
+            if (!squad1.hasAliveWarriors() & squad2.hasAliveWarriors()) {
                 System.out.println("\u001b[31;m Первый отряд полностью разбит!!!\n");
                 System.out.println("\u001b[36;m Победу одержал отряд " + squad2.toString() + " ! УРА!!!\n");
+                isBattleEnd = true;
+                continue;
             }
             // выбор бойцов для второго раунда. Пока не придумал, как обойтись без такого большого дублирования кода
             warrior1 = squad1.getRandomWarrior();
@@ -77,13 +86,18 @@ public class Battle {
             System.out.println(strBattleSecondRound);
             warrior1.takeDamage(warrior2.attack());
             System.out.println(warrior1.getHealthStatus());
+            squad1.needHimDeleteFromSquad(warrior1);
             dateHelper.skipTime();
             if (squad1.hasAliveWarriors() & !squad2.hasAliveWarriors()) {
                 System.out.println("\u001b[31;m Второй отряд полностью разбит!!!\n");
                 System.out.println("\u001b[36;m Победу одержал отряд " + squad1.toString() + " ! УРА!!!\n");
-            } else if (!squad1.hasAliveWarriors() & squad2.hasAliveWarriors()) {
+                isBattleEnd = true;
+                continue;
+            }
+            if (!squad1.hasAliveWarriors() & squad2.hasAliveWarriors()) {
                 System.out.println("\u001b[31;m Первый отряд полностью разбит!!!\n");
                 System.out.println("\u001b[36;m Победу одержал отряд " + squad2.toString() + " ! УРА!!!\n");
+                isBattleEnd = true;
             }
         }
         // вывести вермя сражения

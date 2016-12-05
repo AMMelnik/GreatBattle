@@ -8,70 +8,83 @@ import java.util.Scanner;
  */
 class Squad implements Cloneable {
 
-    private String squadName = new String();
-    // количество бойцов в отряде от 3 до 6
-    private int warriorNumber = (int) (Math.random() * 4) + 3;
-    ArrayList<Warrior> squadList = new ArrayList<>();
+    private String squadName;
+    private int warriorsNumber;// (int) (Math.random() * 4) + 3;
+    ArrayList<Warrior> squad;
 
     void setName() {
         System.out.println("\u001b[30;m Установите имя отряда\n");
         Scanner scName = new Scanner(System.in);
-        this.squadName = scName.nextLine();
+        squadName = scName.nextLine();
     }
 
-    Warrior[] squad = new Warrior[warriorNumber];
+    void setSquadSize() {
+        System.out.println("\u001b[30;m Сколько бойцов будет в отряде?\n");
+        Scanner scNumber = new Scanner(System.in);
+        warriorsNumber = scNumber.nextInt();
+        squad = new ArrayList<>(warriorsNumber);
+    }
+
     // добавление бойцов в отряд
     void createSquad() {
-        for (int i = 0; i < warriorNumber; i++) {
-            int warriorType = (int) (Math.random() * 3 + 1);
-            int firstNameRandom = (int) (Math.random() * 4);
-            int lastNameRandom = (int) (Math.random() * 101 + 1);
-            switch (warriorType) {
-                case 1:
-                    squad[i] = new Scout(firstNameRandom, lastNameRandom);
-                    break;
-                case 2:
-                    squad[i] = new Fighter(firstNameRandom, lastNameRandom);
-                    break;
-                case 3:
-                    squad[i] = new Bomber(firstNameRandom, lastNameRandom);
-                    break;
+        String warriorName;
+        System.out.println("\u001b[30;m Набираем " + warriorsNumber + " бойцов в отряд " + squadName + "\n");
+        for (int i = 0; i < warriorsNumber; i++) {
+            boolean isChoiceTypeEnd = false;
+            System.out.println("\u001b[30;m Придумайте имя бойца номер " + (i + 1) + "\n");
+            Scanner scWarriorName = new Scanner(System.in);
+            warriorName = scWarriorName.nextLine();
+            while (!isChoiceTypeEnd) {
+                System.out.println("\u001b[30;m Выберите класс бойца: \n" + "\u001b[32;m (1) Разведчик\n" + " (2) Борец\n" + " (3) Подрывник\n");
+                Scanner scWarriorType = new Scanner(System.in);
+                switch (scWarriorType.nextLine()) {
+                    case "1":
+                        squad.add(i, new Scout(warriorName));
+                        isChoiceTypeEnd = true;
+                        break;
+                    case "2":
+                        squad.add(i, new Fighter(warriorName));
+                        isChoiceTypeEnd = true;
+                        break;
+                    case "3":
+                        squad.add(i, new Bomber(warriorName));
+                        isChoiceTypeEnd = true;
+                        break;
+                    default:
+                        System.out.println("\u001b[30;m Пожалуйста, выберите вариант 1 - 3");
+                }
             }
-            squadList.add(squad[i]);
         }
     }
 
     void setSquadNameForWarriors() {
         for (Warrior warrior : squad) {
-            warrior.setSquadName(this.squadName);
+            warrior.setSquadName(squadName);
         }
     }
 
-    //находит случайного живого бойца
     Warrior getRandomWarrior() {
-        int randomWarrior = (int) (Math.random() * (squadList.size()));
-        return squadList.get(randomWarrior);
+        int randomWarrior = (int) (Math.random() * (squad.size()));
+        return squad.get(randomWarrior);
     }
 
-    // проверяет, остались ли живые бойцы
     boolean hasAliveWarriors() {
-        for (Warrior warrior : squad) {
-            if (!warrior.isAlive()) squadList.remove(warrior);
-        }
-        if (squadList.isEmpty()) {
-            return false;
-        } else return true;
+        return !squad.isEmpty();
+    }
+
+    void needHimDeleteFromSquad(Warrior warrior) {
+        if (!warrior.isAlive()) squad.remove(warrior);
     }
 
     @Override
     public String toString() {
-        return this.squadName;
+        return squadName;
     }
 
     @Override
     public Squad clone() throws CloneNotSupportedException {
         Squad clonedSquad = (Squad) super.clone();
-        clonedSquad.squad = (Warrior[]) squad.clone();
+        clonedSquad.squad = (ArrayList<Warrior>) squad.clone();
         clonedSquad.setName();
         clonedSquad.setSquadNameForWarriors();
         return clonedSquad;

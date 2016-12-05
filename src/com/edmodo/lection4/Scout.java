@@ -7,31 +7,26 @@ class Scout implements Warrior, Cloneable {
 
     private int damage = 80;
     private int health = 60;
-    private String[] nameArray = {"Patrick", "Paul", "Peter", "Pier"};
     private String name;
     private String squadName;
 
-    Scout(int nameNumber, int surnameNumber) {
-        this.name = nameArray[nameNumber] + "_" + surnameNumber;
+    Scout(String name) {
+        this.name = name;
     }
 
     @Override
     public int attack() {
-        return this.damage;
+        return damage;
     }
 
     @Override
     public void takeDamage(int damage) {
-        this.health -= damage;
+        health -= damage;
     }
 
     @Override
     public boolean isAlive() {
-        if (health > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (health > 0);
     }
 
     @Override
@@ -41,11 +36,9 @@ class Scout implements Warrior, Cloneable {
 
     @Override
     public String getHealthStatus() {
-        String healthStatus = new String();
         if (health > 0) {
-            healthStatus = "\u001b[30;mЕго здоровье равно " + health + "\n";
-        } else healthStatus = "\u001b[31;mБоец пал смертью храбрых!\n";
-        return healthStatus;
+            return "\u001b[30;mЕго здоровье равно " + health + "\n";
+        } else return "\u001b[31;mБоец пал смертью храбрых!\n";
     }
 
     @Override
@@ -55,10 +48,8 @@ class Scout implements Warrior, Cloneable {
 
     @Override
     public String toString() {
-        StringBuilder strScout = new StringBuilder().append("\u001b[34;m" + name)
-                .append("\u001b[30;m. Класс" + "\u001b[34;m Разведчик")
-                .append("\u001b[30;m , Отряд " + "\u001b[30;m" + squadName + "\n");
-        return strScout.toString();
+        return "\u001b[34;m" + name + "\u001b[30;m. Класс" + "\u001b[34;m Разведчик" +
+                "\u001b[30;m , Отряд " + "\u001b[30;m" + squadName + "\n";
     }
 
     @Override

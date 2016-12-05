@@ -21,10 +21,12 @@ class DateHelper {
         battleSkip.add(Calendar.YEAR, -1500);
         return "TIME of BEGIN: " + simpleDateFormat.format(battleBegin.getTime());
     }
+
     // пропустить 20 минут раунда
     void skipTime() {
         battleSkip.add(Calendar.MINUTE, 20);
     }
+
     // общее время сражения
     String getFormattedDiff() {
         long begin = battleBegin.getTimeInMillis();
