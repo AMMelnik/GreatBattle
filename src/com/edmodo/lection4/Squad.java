@@ -10,12 +10,16 @@ class Squad implements Cloneable {
 
     private String squadName;
     private int warriorsNumber;// (int) (Math.random() * 4) + 3;
-    ArrayList<Warrior> squad;
+    private ArrayList<Warrior> squad;
 
-    void setName() {
+    void setSquadName() {
         System.out.println("\u001b[30;m Установите имя отряда\n");
         Scanner scName = new Scanner(System.in);
         squadName = scName.nextLine();
+    }
+
+    private String getSquadName() {
+        return squadName;
     }
 
     void setSquadSize() {
@@ -81,11 +85,15 @@ class Squad implements Cloneable {
         return squadName;
     }
 
+    //проверял в дебаге и с листом бумаги, вроде все правильно в итоге
     @Override
     public Squad clone() throws CloneNotSupportedException {
         Squad clonedSquad = (Squad) super.clone();
-        clonedSquad.squad = (ArrayList<Warrior>) squad.clone();
-        clonedSquad.setName();
+        clonedSquad.squadName = new String(getSquadName());
+        clonedSquad.squad = new ArrayList<>(warriorsNumber);
+        for (int i = 0; i < warriorsNumber; i++) {
+            clonedSquad.squad.add(i, this.squad.get(i).clone());
+        }
         clonedSquad.setSquadNameForWarriors();
         return clonedSquad;
     }

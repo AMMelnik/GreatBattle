@@ -3,21 +3,18 @@ package com.edmodo.lection4;
 /**
  * Created by pc on 19.11.2016.
  */
-public class Battle {
+class Battle {
 
     private Squad squad1 = new Squad();
     private Squad squad2 = null;
 
     void readyToBattle(int value) throws CloneNotSupportedException {
         System.out.println("\u001b[32;m Первый отряд\n");
-        squad1.setName();
+        squad1.setSquadName();
         squad1.setSquadSize();
         squad1.createSquad();
         squad1.setSquadNameForWarriors();
-
-        /* "глубокое" клонирование второго отряда не получается. копируются ссылки, отряд дерется сам с собой
-        Может надо Equals переопределять?
-         */
+        // клонируем
         if (value == 1) {
             try {
                 System.out.println("\u001b[32;m Второй отряд\n");
@@ -30,7 +27,7 @@ public class Battle {
         if (value == 2) {
             squad2 = new Squad();
             System.out.println("\u001b[32;m Второй отряд\n");
-            squad2.setName();
+            squad2.setSquadName();
             squad2.setSquadSize();
             squad2.createSquad();
             squad2.setSquadNameForWarriors();
@@ -51,11 +48,8 @@ public class Battle {
             warrior1 = squad1.getRandomWarrior();
             warrior2 = squad2.getRandomWarrior();
             // описание раунда
-            StringBuilder strBattleFirstRound = new StringBuilder("\u001b[30;m     На бой вызываются: \n")
-                    .append(warrior1.toString() + "и " + warrior2.toString() + "\n")
-                    .append("\u001b[30;mАтакует боец " + warrior1.getNameOnly() + "\n")
-                    .append("\u001b[30;mБоец " + warrior2.getNameOnly() + "\u001b[30;m  принимает удар!");
-            System.out.println(strBattleFirstRound);
+            System.out.println("\u001b[30;m     На бой вызываются: \n" + warrior1.toString() + "и " + warrior2.toString() + "\n" +
+                    "\u001b[30;mАтакует боец " + warrior1.getNameOnly() + "\n" + "\u001b[30;mБоец " + warrior2.getNameOnly() + "\u001b[30;m  принимает удар!");
             // удар и потеря здоровья
             warrior2.takeDamage(warrior1.attack());
             System.out.println(warrior2.getHealthStatus());
@@ -76,14 +70,11 @@ public class Battle {
                 isBattleEnd = true;
                 continue;
             }
-            // выбор бойцов для второго раунда. Пока не придумал, как обойтись без такого большого дублирования кода
+            //выбор бойцов для второго раунда
             warrior1 = squad1.getRandomWarrior();
             warrior2 = squad2.getRandomWarrior();
-            StringBuilder strBattleSecondRound = new StringBuilder("\u001b[30;m     На бой вызываются: \n")
-                    .append(warrior1.toString() + "и " + warrior2.toString() + "\n")
-                    .append("\u001b[30;mАтакует боец " + warrior2.getNameOnly() + "\n")
-                    .append("\u001b[30;mБоец " + warrior1.getNameOnly() + "\u001b[30;m  принимает удар!");
-            System.out.println(strBattleSecondRound);
+            System.out.println("\u001b[30;m     На бой вызываются: \n" + warrior1.toString() + "и " + warrior2.toString() + "\n" +
+                    "\u001b[30;mАтакует боец " + warrior2.getNameOnly() + "\n" + "\u001b[30;mБоец " + warrior1.getNameOnly() + "\u001b[30;m  принимает удар!");
             warrior1.takeDamage(warrior2.attack());
             System.out.println(warrior1.getHealthStatus());
             squad1.needHimDeleteFromSquad(warrior1);

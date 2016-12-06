@@ -3,12 +3,12 @@ package com.edmodo.lection4;
 /**
  * Created by pc on 19.11.2016.
  */
-public class Fighter implements Warrior, Cloneable {
+class Fighter implements Warrior, Cloneable {
 
-    int damage = 50;
-    int health = 150;
-    String name;
-    String squadName;
+    private int damage = 50;
+    private int health = 150;
+    private String name;
+    private String squadName;
 
 
     Fighter(String name) {

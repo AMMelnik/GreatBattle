@@ -3,7 +3,7 @@ package com.edmodo.lection4;
 /**
  * Created by pc on 19.11.2016.
  */
-public class Bomber implements Warrior, Cloneable {
+class Bomber implements Warrior, Cloneable {
 
     private int damage = 100;
     private int health = 50;

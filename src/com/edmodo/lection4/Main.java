@@ -8,13 +8,12 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws CloneNotSupportedException {
-        System.out.println("\u001b[30;m Создать отряды: \n"
-                + "\u001b[32;m (1) одинаковыми\n" + "\u001b[32;m (2) разными\n");
+        System.out.println("\u001b[30;m Как создать отряды: \n"
+                + "\u001b[32;m (1) запустить механизм клонирования\n" + "\u001b[32;m (2) набрать бойцов самостоятельно\n");
         Scanner scTwoSquads = new Scanner(System.in);
         int twoSquads = scTwoSquads.nextInt();
         Battle battle = new Battle();
         battle.readyToBattle(twoSquads);
         battle.startBattle();
-
     }
 }
